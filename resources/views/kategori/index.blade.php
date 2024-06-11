@@ -27,7 +27,6 @@
                                     <th>ID</th>
                                     <th>Deskripsi</th>
                                     <th>Kategori</th>
-                                    <th>Kode</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -36,7 +35,6 @@
                                     <tr>
                                         <td>{{ $kategori->id }}</td>
                                         <td>{{ $kategori->deskripsi }}</td>
-                                        <td>{{ $kategori->ketKategori }}</td>
                                         <td>{{ $kategori->kategori }}</td>
                                         <td>
                                             <a href="{{ route('kategori.show', $kategori->id) }}" class="btn btn-info btn-sm">Detail</a>

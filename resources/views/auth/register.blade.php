@@ -13,7 +13,7 @@
         }
 
         .form-signin {
-            max-width: 400px;
+            max-width: 900px; /* Lebar diperbesar untuk menampung tiga kolom */
             padding: 30px;
             margin: auto;
             text-align: center;
@@ -66,6 +66,10 @@
         .form-signin a:hover {
             text-decoration: underline;
         }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -74,19 +78,27 @@
         @csrf
         <h1 class="h3 mb-3 fw-normal">Register</h1>
 
-        <div class="form-floating">
-            <input type="text" name="name" class="form-control" id="name" placeholder="Name" required>
-            <label for="name"><i class="fas fa-user"></i> Name</label>
-        </div>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="form-floating">
+                    <input type="text" name="name" class="form-control" id="name" placeholder="Name" required>
+                    <label for="name"><i class="fas fa-user"></i> Name</label>
+                </div>
+            </div>
 
-        <div class="form-floating">
-            <input type="email" name="email" class="form-control" id="email" placeholder="Email address" required>
-            <label for="email"><i class="fas fa-envelope"></i> Email address</label>
-        </div>
+            <div class="col-md-4">
+                <div class="form-floating">
+                    <input type="email" name="email" class="form-control" id="email" placeholder="Email address" required>
+                    <label for="email"><i class="fas fa-envelope"></i> Email address</label>
+                </div>
+            </div>
 
-        <div class="form-floating">
-            <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
-            <label for="password"><i class="fas fa-lock"></i> Password</label>
+            <div class="col-md-4">
+                <div class="form-floating">
+                    <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
+                    <label for="password"><i class="fas fa-lock"></i> Password</label>
+                </div>
+            </div>
         </div>
 
         <button class="w-100 btn btn-lg btn-primary" type="submit">Register</button>

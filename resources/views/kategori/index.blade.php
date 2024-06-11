@@ -35,7 +35,7 @@
                                     <tr>
                                         <td>{{ $kategori->id }}</td>
                                         <td>{{ $kategori->deskripsi }}</td>
-                                        <td>{{ $kategori->kategori }}</td>
+                                        <td>{{ $kategori->ketKategori }}</td>
                                         <td>
                                             <a href="{{ route('kategori.show', $kategori->id) }}" class="btn btn-info btn-sm">Detail</a>
                                             <a href="{{ route('kategori.edit', $kategori->id) }}" class="btn btn-warning btn-sm">Edit</a>

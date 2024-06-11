@@ -37,19 +37,12 @@ class BarangController extends Controller
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $akategori = Kategori::all();
         return view('barang.create',compact('akategori'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
     // Validate form
@@ -91,9 +84,6 @@ class BarangController extends Controller
         return view('barang.show', compact('rsetBarang'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
     $akategori = Kategori::all();
@@ -104,9 +94,6 @@ class BarangController extends Controller
     }
 
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         // Validate the request
@@ -163,9 +150,6 @@ class BarangController extends Controller
     }
 
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     { {
             if (DB::table('barangmasuk')->where('barang_id', $id)->exists()) {

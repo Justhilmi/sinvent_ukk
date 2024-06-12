@@ -11,10 +11,8 @@ class MasukController extends Controller
 {
     public function index()
     {
-        #$rsetBarangmasuk = barangmasuk::latest()->paginate(10);
         $Barangmasuk = barangmasuk::with('barang')->paginate(10);
         return view('barangmasuk.index',compact('Barangmasuk'));
-        //return view('barangmasuk.index');
     }
 
     public function create()
@@ -74,17 +72,7 @@ class MasukController extends Controller
     }
     public function destroy($id)
     {
-        // Cek apakah data barang masuk dengan ID yang diberikan ada di tabel barang
-        // if (DB::table('barang')->where('id', $id)->exists()){
-        //     return redirect()->route('barangmasuk.index')->with(['Gagal' => 'Data Gagal Dihapus!']);
-        // } else {
-        //     // Hapus data barang masuk berdasarkan ID
-        //     Barangmasuk::findOrFail($id)->delete();
-        //     return redirect()->route('barangmasuk.index')->with(['success' => 'Data Barang Masuk Berhasil Dihapus!']);
-        // }
-        // Hapus data barang masuk berdasarkan ID
         Barangmasuk::findOrFail($id)->delete();
-
         return redirect()->route('barangmasuk.index')->with('success', 'Data barang masuk berhasil dihapus');
     }
 }

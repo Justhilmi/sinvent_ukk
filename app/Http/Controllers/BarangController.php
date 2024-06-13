@@ -71,16 +71,11 @@ class BarangController extends Controller
     return redirect()->route('barang.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $rsetBarang = Barang::find($id);
 
-        //return $rsetBarang;
 
-        //return view
         return view('barang.show', compact('rsetBarang'));
     }
 

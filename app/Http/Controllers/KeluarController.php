@@ -9,10 +9,26 @@ use Illuminate\Support\Facades\DB;
 
 class KeluarController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $Barangkeluar = barangkeluar::with('barang')->paginate(10);
-        return view('barangkeluar.index',compact('Barangkeluar'));
+        $tgl_keluar = $request->input('tgl_keluar');
+        $seri = $request->input('seri');
+
+        $query = Barangkeluar::with('barang');
+
+        if ($tgl_keluar) {
+            $query->where('tgl_keluar', $tgl_keluar);
+        }
+
+        if ($seri) {
+            $query->whereHas('barang', function ($query) use ($seri) {
+                $query->where('seri', 'like', '%' . $seri . '%');
+            });
+        }
+
+        $Barangkeluar = $query->paginate(10);
+
+        return view('barangkeluar.index', compact('Barangkeluar'));
     }
 
     public function create()

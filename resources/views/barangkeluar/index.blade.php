@@ -17,7 +17,19 @@
                                 {{ session('Gagal') }}
                             </div>
                         @endif
-
+                        <form action="{{ route('barangkeluar.index') }}" method="GET" class="mb-3">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <input type="date" name="tgl_keluar" class="form-control" value="{{ request('tgl_keluar') }}" placeholder="Tanggal Keluar">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" name="seri" class="form-control" value="{{ request('seri') }}" placeholder="Seri Barang">
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary">Search</button>
+                                </div>
+                            </div>
+                        </form>
                         <a href="{{ route('barangkeluar.create') }}" class="btn btn-primary mb-2">Tambah Barang Keluar</a>
 
                         <table class="table">

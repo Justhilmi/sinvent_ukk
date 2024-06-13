@@ -8,18 +8,26 @@ use App\Models\Kategori;
 
 class KategoriController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $rsetKategori = Kategori::select('id', 'deskripsi', 'kategori',
+        $search = $request->input('search');
+
+        $query = Kategori::select('id', 'deskripsi', 'kategori',
             DB::raw('(CASE
                 WHEN kategori = "M" THEN "Modal"
                 WHEN kategori = "A" THEN "Alat"
                 WHEN kategori = "BHP" THEN "Bahan Habis Pakai"
                 ELSE "Bahan Tidak Habis Pakai"
-                END) AS ketKategori'))
-            ->paginate(10);
+                END) AS ketKategori'));
 
-        return view('kategori.index', compact('rsetKategori'));
+        if ($search) {
+            $query->where('deskripsi', 'like', '%' . $search . '%')
+                ->orWhere('kategori', 'like', '%' . $search . '%');
+        }
+
+        $rsetKategori = $query->paginate(10);
+
+        return view('kategori.index', compact('rsetKategori', 'search'));
     }
 
     public function create()

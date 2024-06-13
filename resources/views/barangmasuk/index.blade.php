@@ -1,4 +1,4 @@
-@extends('layout.layouts') 
+@extends('layout.layouts')
 
 @section('content')
     <div class="container">
@@ -13,11 +13,20 @@
                             </div>
                         @endif
 
-                        @if(session('Gagal'))
-                            <div class="alert alert-danger mt-3">
-                                {{ session('Gagal') }}
+                        <form action="{{ route('barangmasuk.index') }}" method="GET" class="mb-3">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <input type="date" name="tgl_masuk" class="form-control" value="{{ request('tgl_masuk') }}" placeholder="Tanggal Masuk">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" name="seri" class="form-control" value="{{ request('seri') }}" placeholder="Seri Barang">
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary">Search</button>
+                                    <a href="{{ route('barangmasuk.index') }}" class="btn btn-secondary">Reset</a>
+                                </div>
                             </div>
-                        @endif
+                        </form>
 
                         <a href="{{ route('barangmasuk.create') }}" class="btn btn-primary mb-2">Tambah Barang Masuk</a>
 
@@ -53,7 +62,7 @@
                             </tbody>
                         </table>
 
-                        {{ $Barangmasuk->links('pagination::bootstrap-4') }}
+                        {{ $Barangmasuk->appends(request()->input())->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
             </div>

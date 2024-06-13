@@ -9,10 +9,32 @@ use Illuminate\Support\Facades\DB;
 
 class MasukController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $Barangmasuk = barangmasuk::with('barang')->paginate(10);
-        return view('barangmasuk.index',compact('Barangmasuk'));
+        // Ambil data pencarian dari request
+        $tgl_masuk = $request->input('tgl_masuk');
+        $seri = $request->input('seri');
+
+        // Query data barang masuk dengan eager loading relasi barang
+        $query = Barangmasuk::with('barang');
+
+        // Filter berdasarkan tanggal masuk jika ada input
+        if ($tgl_masuk) {
+            $query->where('tgl_masuk', $tgl_masuk);
+        }
+
+        // Filter berdasarkan seri barang jika ada input
+        if ($seri) {
+            $query->whereHas('barang', function ($query) use ($seri) {
+                $query->where('seri', 'like', '%' . $seri . '%');
+            });
+        }
+
+        // Pagination dengan 10 item per halaman
+        $Barangmasuk = $query->paginate(10);
+
+        // Kirim data ke view
+        return view('barangmasuk.index', compact('Barangmasuk'));
     }
 
     public function create()

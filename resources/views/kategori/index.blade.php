@@ -28,38 +28,46 @@
 
                         <a href="{{ route('kategori.create') }}" class="btn btn-primary mb-2">Tambah Kategori</a>
 
-                        <table class="table">
-                            <thead>
+                        <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>DESKRIPSI</th>
+                                <th>KATEGORI</th>
+                                <th style="width: 15%">AKSI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $kategoriMap = [
+                                    'M' => 'Modal',
+                                    'A' => 'Alat',
+                                    'BHP' => 'Bahan Habis Pakai',
+                                    'BTHP' => 'Bahan Tidak Habis Pakai',
+                                ];
+                            @endphp
+                            @forelse ($rsetKategori as $rowkategori)
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Deskripsi</th>
-                                    <th>Keterangan</th>
-                                    <th>Kode</th>
-                                    <th>Action</th>
+                                    <td>{{ $rowkategori->id }}</td>
+                                    <td>{{ $rowkategori->deskripsi }}</td>
+                                    <td>{{ $kategoriMap[$rowkategori->kategori] ?? $rowkategori->kategori }}</td>
+                                    <td class="text-center">
+                                        <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('kategori.destroy', $rowkategori->id) }}" method="POST">
+                                            <a href="{{ route('kategori.show', $rowkategori->id) }}" class="btn btn-sm btn-dark"><i class="fa fa-eye"></i></a>
+                                            <a href="{{ route('kategori.edit', $rowkategori->id) }}" class="btn btn-sm btn-primary"><i class="fa fa-pencil-alt"></i></a>
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                                        </form>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($rsetKategori as $kategori)
-                                    <tr>
-                                        <td>{{ $kategori->id }}</td>
-                                        <td>{{ $kategori->deskripsi }}</td>
-                                        <td>{{ $kategori->ketKategori }}</td>
-                                        <td>{{ $kategori->kategori}}</td>
-                                        <td>
-                                            <a href="{{ route('kategori.show', $kategori->id) }}" class="btn btn-info btn-sm">Detail</a>
-                                            <a href="{{ route('kategori.edit', $kategori->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                            
-                                            <!-- Form untuk handle delete -->
-                                            <form action="{{ route('kategori.destroy', $kategori->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Anda yakin ingin menghapus?')">Hapus</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center">Data Kategori belum tersedia</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
 
                         {{ $rsetKategori->links('pagination::bootstrap-5') }}
                     </div>

@@ -11,52 +11,70 @@ class KategoriController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-
-        $query = Kategori::select('id', 'deskripsi', 'kategori',
-            DB::raw('(CASE
-                WHEN kategori = "M" THEN "Modal"
-                WHEN kategori = "A" THEN "Alat"
-                WHEN kategori = "BHP" THEN "Bahan Habis Pakai"
-                ELSE "Bahan Tidak Habis Pakai"
-                END) AS ketKategori'));
-
+    
+        // Provide a default value for the argument if not provided
+        $arg = $search ?? '';
+    
+        // Call the stored procedure with the required argument
+        $kategoriData = DB::select('CALL getKategori(?)', [$arg]);
+    
+        // Create query builder for kategori data
+        $query = DB::table('kategori')->select('id', 'deskripsi', 'kategori');
+    
         if ($search) {
             $query->where('deskripsi', 'like', '%' . $search . '%')
                 ->orWhere('kategori', 'like', '%' . $search . '%');
         }
-
+    
         $rsetKategori = $query->paginate(10);
-
-        return view('kategori.index', compact('rsetKategori', 'search'));
+    
+        return view('kategori.index', compact('rsetKategori', 'search', 'kategoriData'));
     }
+    
+
 
     public function create()
     {
-        $aKategori = [
-            'blank' => 'Pilih Kategori',
-            'M' => 'Barang Modal',
-            'A' => 'Alat',
-            'BHP' => 'Bahan Habis Pakai',
-            'BTHP' => 'Bahan Tidak Habis Pakai'
-        ];
-        return view('kategori.create', compact('aKategori'));
+        return view('kategori.create');
     }
 
     public function store(Request $request)
     {
-        // Validate the request
+        //cek data
+        // echo "data deskripsi";
+        // echo $request->deskripsi;
+        // die('asd');
+
+
         $request->validate([
             'deskripsi' => 'required',
-            'kategori' => 'required|in:M,A,BHP,BTHP',
+            'kategori' => 'required',
         ]);
 
-        // Create kategori
-        Kategori::create([
-            'deskripsi' => $request->deskripsi,
-            'kategori' => $request->kategori, // Pastikan untuk menyertakan kategori di sini
-        ]);
+        // Create a new Kategori
+        //Kategori::create([
+        //    'deskripsi' => $request->deskripsi,
+        //    'kategori' => $request->kategori,
+       // ]);
 
-        return redirect()->route('kategori.index')->with(['success' => 'Data Berhasil Disimpan!']);
+        try {
+            DB::beginTransaction(); // <= Starting the transaction
+
+            // Insert a new order history
+            DB::table('kategori')->insert([
+                'deskripsi' => $request->deskripsi,
+                'kategori' =>$request->kategori,
+            ]);
+
+            DB::commit(); // <= Commit the changes
+        } catch (\Exception $e) {
+            report($e);
+            
+            DB::rollBack(); // <= Rollback in case of an exception
+        }
+
+                // Redirect to index
+                return redirect()->route('kategori.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
     public function show(string $id)
@@ -68,17 +86,9 @@ class KategoriController extends Controller
 
     public function edit(string $id)
     {
-        $aKategori = [
-            'blank' => 'Pilih Kategori',
-            'M' => 'Barang Modal',
-            'A' => 'Alat',
-            'BHP' => 'Bahan Habis Pakai',
-            'BTHP' => 'Bahan Tidak Habis Pakai'
-        ];
-
         $rsetKategori = Kategori::find($id);
 
-        return view('kategori.edit', compact('rsetKategori', 'aKategori'));
+        return view('kategori.edit', compact('rsetKategori'));
     }
 
     public function update(Request $request, string $id)

@@ -1,40 +1,70 @@
 @extends('layout.layouts')
+
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Tambah Kategori</div>
-                    <div class="card-body">
-                        @if(session('success'))
-                            <div class="alert alert-success">
-                                {{ session('success') }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form action="{{ route('kategori.store') }}" method="POST">
+                        @csrf
+
+                        <div class="form-group">
+                            <label class="font-weight-bold">DESKRIPSI</label>
+                            <input type="text" class="form-control @error('deskripsi') is-invalid @enderror"
+                                name="deskripsi" value="{{ old('deskripsi') }}" placeholder="Masukkan Deskripsi Kategori">
+
+                            @error('deskripsi')
+                            <div class="alert alert-danger mt-2">
+                                {{ $message }}
                             </div>
-                        @endif
+                            @enderror
+                        </div>
 
-                        <form method="POST" action="{{ route('kategori.store') }}">
-                            @csrf
-
-                            <div class="form-group">
-                                <label for="deskripsi">Deskripsi</label>
-                                <input type="text" class="form-control" id="deskripsi" name="deskripsi" required>
+                        <div class="form-group">
+                            <label class="font-weight-bold">KATEGORI</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="kategori" id="kategori" value="M">
+                                <label class="form-check-label" for="kategori">
+                                    M - Modal
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="kategori" id="kategori" value="A">
+                                <label class="form-check-label" for="kategori">
+                                    A - Alat
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="kategori" id="kategori"
+                                    value="BHP">
+                                <label class="form-check-label" for="kategori">
+                                    BHP - Barang Habis Pakai
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="kategori" id="kategori"
+                                    value="BTHP">
+                                <label class="form-check-label" for="kategori">
+                                    BTHP - Barang Tidak Habis Pakai
+                                </label>
                             </div>
 
-                            <div class="form-group">
-                                <label for="kategori">Kategori</label>
-                                <select class="form-control" id="kategori" name="kategori" required>
-                                    @foreach($aKategori as $key => $value)
-                                        <option value="{{ $key }}">{{ $value }}</option>
-                                    @endforeach
-                                </select>
+                            @error('kategori')
+                            <div class="alert alert-danger mt-2">
+                                {{ $message }}
                             </div>
+                            @enderror
+                        </div>
 
-                            <button type="submit" class="btn btn-primary">Simpan</button>
-                            <a class="btn btn-secondary" href="{{ route('kategori.index') }}">Batal</a>
-                        </form>
-                    </div>
+                        <button type="submit" class="btn btn-md btn-primary">SIMPAN</button>
+                        <button type="reset" class="btn btn-md btn-warning">RESET</button>
+                        <a href="{{ route('kategori.index') }}" class="btn btn-md btn-secondary">Kembali</a>
+
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 @endsection

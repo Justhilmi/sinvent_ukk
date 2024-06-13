@@ -1,37 +1,68 @@
 @extends('layout.layouts')
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Edit Kategori</div>
-                    <div class="card-body">
-                        <form action="{{ route('kategori.update', $rsetKategori->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form action="{{ route('kategori.update', $rsetKategori->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
 
-                            <div class="form-group">
-                                <label for="deskripsi">Deskripsi:</label>
-                                <input type="text" name="deskripsi" value="{{ $rsetKategori->deskripsi }}" class="form-control" required>
+                        <div class="form-group">
+                            <label class="font-weight-bold">DESKRIPSI</label>
+                            <input type="text" class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" value="{{ old('deskripsi', $rsetKategori->deskripsi) }}" placeholder="Masukkan Deskripsi Kategori">
+
+                            @error('deskripsi')
+                                <div class="alert alert-danger mt-2">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label class="font-weight-bold">KATEGORI</label>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="kategori" id="kategoriM" value="M" {{ $rsetKategori->kategori == 'M' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="kategoriM">
+                                    M - Modal
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="kategori" id="kategoriA" value="A" {{ $rsetKategori->kategori == 'A' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="kategoriA">
+                                    A - Alat
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="kategori" id="kategoriBHP" value="BHP" {{ $rsetKategori->kategori == 'BHP' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="kategoriBHP">
+                                    BHP - Barang Habis Pakai
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="kategori" id="kategoriBTHP" value="BTHP" {{ $rsetKategori->kategori == 'BTHP' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="kategoriBTHP">
+                                    BTHP - Barang Tidak Habis Pakai
+                                </label>
                             </div>
 
-                            <div class="form-group">
-                                <label for="kategori">Kategori:</label>
-                                <select name="kategori" class="form-control" required>
-                                    @foreach ($aKategori as $key => $value)
-                                        <option value="{{ $key }}" {{ $rsetKategori->kategori == $key ? 'selected' : '' }}>{{ $value }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            @error('kategori')
+                                <div class="alert alert-danger mt-2">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
 
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                                <a href="{{ route('kategori.index') }}" class="btn btn-secondary">Kembali</a>
-                            </div>
-                        </form>
-                    </div>
+                        <button type="submit" class="btn btn-md btn-primary">SIMPAN</button>
+                        <button type="reset" class="btn btn-md btn-warning">RESET</button>
+                        <a href="{{ route('kategori.index') }}" class="btn btn-md btn-secondary">Kembali</a>
+
+                    </form> 
                 </div>
             </div>
         </div>
     </div>
+</div>
 @endsection

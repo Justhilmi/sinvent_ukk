@@ -17,10 +17,7 @@ return new class extends Migration
             $table->string('seri',50)->nullable();
             $table->text('spesifikasi')->nullable();
             $table->smallInteger('stok')->default(0);
-            $table->tinyInteger('kategori_id')->unsigned();
-            $table->foreign('kategori_id')->references('id')->on('kategori')
-                  ->onUpdate('cascade')
-                  ->onDelete('restrict');
+            $table->foreignId('kategori_id')->constrained('kategori')->cascadeOnUpdate()->restrictOnDelete();
             $table->string('foto')
                   ->nullable()
                   ->default(NULL);      

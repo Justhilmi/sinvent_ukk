@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('tgl_keluar');
             $table->smallInteger('qty_keluar')->default(1);
-            $table->foreignId('barang_id')->references('id')->on('barang')->onDelete('restrict');
+            $table->foreignId('barang_id')->constrained('barang')->cascadeOnUpdate()->restrictOnDelete();
             $table->timestamps();
         });
     }

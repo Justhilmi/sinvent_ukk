@@ -70,9 +70,31 @@ class MasukController extends Controller
 
         return redirect()->route('barangmasuk.index')->with('success', 'Data barang masuk berhasil diupdate');
     }
-    public function destroy($id)
+    public function destroy(string $id)
     {
-        Barangmasuk::findOrFail($id)->delete();
-        return redirect()->route('barangmasuk.index')->with('success', 'Data barang masuk berhasil dihapus');
+        // Memulai transaksi
+        DB::beginTransaction();
+
+        try {
+            // Temukan barang masuk berdasarkan ID
+            $barangMasuk = BarangMasuk::find($id);
+
+            if (!$barangMasuk) {
+                // Rollback transaksi jika barang masuk tidak ditemukan
+                DB::rollBack();
+                return redirect()->route('barangmasuk.index')->with(['error' => 'Data tidak ditemukan']);
+            }
+
+            // Hapus barang masuk
+            $barangMasuk->delete();
+
+            // Komit transaksi
+            DB::commit();
+            return redirect()->route('barangmasuk.index')->with(['success' => 'Data Berhasil Dihapus']);
+        } catch (\Exception $e) {
+            // Rollback transaksi jika terjadi kesalahan
+            DB::rollBack();
+            return redirect()->route('barangmasuk.index')->with(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+        }
     }
 }

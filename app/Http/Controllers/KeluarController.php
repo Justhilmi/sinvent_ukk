@@ -69,9 +69,31 @@ class KeluarController extends Controller
         return redirect()->route('barangkeluar.index')->with('success', 'Data barang keluar berhasil diupdate');
     }
 
-    public function destroy($id)
+    public function destroy(string $id)
     {
-        Barangkeluar::findOrFail($id)->delete();
-        return redirect()->route('barangkeluar.index')->with('success', 'Data barang masuk berhasil dihapus');
+        // Mulai transaksi
+        DB::beginTransaction();
+
+        try {
+            // Temukan barang keluar berdasarkan ID
+            $barangKeluar = BarangKeluar::find($id);
+
+            if (!$barangKeluar) {
+                // Rollback transaksi jika barang keluar tidak ditemukan
+                DB::rollBack();
+                return redirect()->route('barangkeluar.index')->with(['error' => 'Data tidak ditemukan']);
+            }
+
+            // Hapus barang keluar
+            $barangKeluar->delete();
+
+            // Komit transaksi
+            DB::commit();
+            return redirect()->route('barangkeluar.index')->with(['success' => 'Data Berhasil Dihapus']);
+        } catch (\Exception $e) {
+            // Rollback transaksi jika terjadi kesalahan
+            DB::rollBack();
+            return redirect()->route('barangkeluar.index')->with(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+        }
     }
 }

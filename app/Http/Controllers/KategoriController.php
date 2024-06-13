@@ -94,13 +94,30 @@ class KategoriController extends Controller
 
     public function destroy(string $id)
     {
-        if (DB::table('barang')->where('kategori_id', $id)->exists()){
-            return redirect()->route('kategori.index')->with(['Gagal' => 'Data Gagal Dihapus!']);
-        } else {
-            $rsetKategori = Kategori::find($id);
-            $rsetKategori->delete();
-            return redirect()->route('kategori.index')->with(['success' => 'Data Berhasil Dihapus!']);
-        };
+        // Mulai transaksi
+        DB::beginTransaction();
+
+        try {
+            // Cek apakah ada barang yang terkait dengan kategori yang akan dihapus
+            if (DB::table('barang')->where('kategori_id', $id)->exists()) {
+
+                DB::rollBack();
+                return redirect()->route('kategori.index')->with(['Gagal' => 'Data Gagal Dihapus! Kategori masih memiliki barang terkait.']);
+            } else {
+                // Hapus kategori
+                $rsetKategori = Kategori::find($id);
+                $rsetKategori->delete();
+
+                // Komit transaksi
+                DB::commit();
+                return redirect()->route('kategori.index')->with(['success' => 'Data Berhasil Dihapus!']);
+            }
+        } catch (\Exception $e) {
+            // Rollback transaksi jika ada kesalahan
+            DB::rollBack();
+            return redirect()->route('kategori.index')->with(['Gagal' => 'Terjadi kesalahan saat menghapus data: ' . $e->getMessage()]);
+        }
     }
+
 
 }

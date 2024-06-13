@@ -18,6 +18,13 @@
                                 {{ session('Gagal') }}
                             </div>
                         @endif
+                        
+                        <form method="GET" action="{{ route('kategori.index') }}" class="mb-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="search" placeholder="Cari kategori atau deskripsi..." value="{{ request('search') }}">
+                                <button class="btn btn-primary" type="submit">Cari</button>
+                            </div>
+                        </form>
 
                         <a href="{{ route('kategori.create') }}" class="btn btn-primary mb-2">Tambah Kategori</a>
 
@@ -26,7 +33,8 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Deskripsi</th>
-                                    <th>Kategori</th>
+                                    <th>Keterangan</th>
+                                    <th>Kode</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -36,6 +44,7 @@
                                         <td>{{ $kategori->id }}</td>
                                         <td>{{ $kategori->deskripsi }}</td>
                                         <td>{{ $kategori->ketKategori }}</td>
+                                        <td>{{ $kategori->kategori}}</td>
                                         <td>
                                             <a href="{{ route('kategori.show', $kategori->id) }}" class="btn btn-info btn-sm">Detail</a>
                                             <a href="{{ route('kategori.edit', $kategori->id) }}" class="btn btn-warning btn-sm">Edit</a>

@@ -11,6 +11,11 @@
                         <p>{{ $message }}</p>
                     </div>
                 @endif
+                @if ($message = Session::get('error'))
+                    <div class="alert alert-danger">
+                        <p>{{ $message }}</p>
+                    </div>
+                @endif
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">

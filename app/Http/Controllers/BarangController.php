@@ -152,12 +152,8 @@ class BarangController extends Controller
 
     public function destroy(string $id)
     { {
-            if (DB::table('barangmasuk')->where('barang_id', $id)->exists()) {
-                return redirect()->route('barang.index')->with(['Gagal' => 'Data Gagal Dihapus!']);
-            }
-
-            if (DB::table('barangkeluar')->where('barang_id', $id)->exists()) {
-                return redirect()->route('barang.index')->with(['Gagal' => 'Data Gagal Dihapus!']);
+            if (DB::table('barangmasuk')->where('barang_id', $id)->exists() || DB::table('barangkeluar')->where('barang_id', $id)->exists()) {
+                return redirect()->back()->with(['error' => 'Data Gagal Dihapus!']);
             }
 
             $rsetBarang = Barang::find($id);

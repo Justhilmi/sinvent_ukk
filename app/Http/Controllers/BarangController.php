@@ -88,7 +88,6 @@ class BarangController extends Controller
     return view('barang.edit', compact('rsetBarang', 'akategori', 'selectedKategori'));
     }
 
-
     public function update(Request $request, string $id)
     {
         // Validate the request
